@@ -24,7 +24,9 @@ jobs:
     - name: Display structure of downloaded files
       run: ls -R
 
+    - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: ./appinstall
+        name: appinstall
+        path: .
     
