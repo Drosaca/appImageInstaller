@@ -26,6 +26,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: appinstall
+        path: ./appinstall
         
     - uses: actions/download-artifact@v3
       with:
