@@ -20,10 +20,11 @@ jobs:
 
     - name: Build
       run: go build -o appinstall
-
-    - uses: actions/download-artifact@v3
-      with:
-        name: my-artifact
     
     - name: Display structure of downloaded files
       run: ls -R
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: appinstall
+    
