@@ -19,9 +19,16 @@ func extractApp(appPath string) {
 	}
 }
 
-func createDirectories(config structs.Config) {
-	os.MkdirAll(config.ExtractDir, os.ModePerm)
-	os.MkdirAll(config.ExecDir, os.ModePerm)
+func createDirectories(config structs.Config) error {
+	err := os.MkdirAll(config.ExtractDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(config.ExecDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func setConfig(path string) structs.Config {
@@ -30,18 +37,43 @@ func setConfig(path string) structs.Config {
 		ExtractDir:      "/tmp/appInstaller",
 		ExecDir:         "/usr/share/appImages/",
 		GnomeDesktopDir: "/usr/share/applications/",
+		Debug:           false,
 		ImgPath:         "/usr/share/pixmaps/",
 		InputPath:       path,
 	}
 	config.ExecPath = filepath.Join(config.ExecDir, filepath.Base(config.InputPath))
 	config.AppExtractDir = filepath.Join(config.ExtractDir, "squashfs-root")
-	createDirectories(config)
+	config.InputDir = filepath.Dir(config.InputPath)
+	config.InputFileName = filepath.Base(config.InputPath)
 	return config
 }
 
+func preInstall(config structs.Config) error {
+	err := createDirectories(config)
+	if err != nil {
+		log.Fatal("fail to create directories: ", err)
+	}
+	err = os.Chmod(config.InputPath, 777)
+	if err != nil {
+		return err
+	}
+	err = utils.Copy(config.InputPath, config.ExecDir)
+	if err != nil {
+		return err
+	}
+	err = os.Chmod(config.ExecPath, 777)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func install(config structs.Config) {
+	err := preInstall(config)
+	if err != nil {
+		log.Fatal("setup failed: ", err)
+	}
 	os.Chdir(config.ExtractDir)
-	utils.Copy(config.InputPath, config.ExecPath)
 	extractApp(config.InputPath)
 	desktopPath := f.FindInternalDesktop(config.AppExtractDir)
 	desktop, err := f.GenerateDesktopFile(desktopPath)
@@ -67,7 +99,13 @@ func main() {
 	}
 	path, _ := filepath.Abs(os.Args[1])
 	config := setConfig(path)
-	os.RemoveAll(config.ExtractDir)
+	err := os.RemoveAll(config.ExtractDir)
+	if err != nil {
+		log.Fatal("removing", err)
+	}
 	install(config)
-	os.RemoveAll(config.ExtractDir)
+	err = os.RemoveAll(config.ExtractDir)
+	if err != nil {
+		log.Fatal("removing: ", err)
+	}
 }

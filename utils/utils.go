@@ -62,9 +62,12 @@ func findFiles(path string, patterns []string) (string, error) {
 func Copy(src, dst string) error {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
-		return err
+		return fmt.Errorf("fail to stat %s: %s", src, err)
 	}
-	dstFileStat, _ := os.Stat(dst)
+	dstFileStat, err := os.Stat(dst)
+	if err != nil {
+		return fmt.Errorf("fail to stat %s: %s", dst, err)
+	}
 	if dstFileStat.IsDir() {
 		dst = filepath.Join(dst, filepath.Base(src))
 	}
