@@ -53,15 +53,11 @@ func preInstall(config structs.Config) error {
 	if err != nil {
 		log.Fatal("fail to create directories: ", err)
 	}
-	err = os.Chmod(config.InputPath, 777)
+	err = os.Chmod(config.InputPath, 0777)
 	if err != nil {
 		return err
 	}
 	err = utils.Copy(config.InputPath, config.ExecDir)
-	if err != nil {
-		return err
-	}
-	err = os.Chmod(config.ExecPath, 777)
 	if err != nil {
 		return err
 	}
