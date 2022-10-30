@@ -2,8 +2,6 @@ name: CreateRelease
 
 on:
   push:
-    branches:
-      ["main"]
     tags:
       - 'v*'
 
