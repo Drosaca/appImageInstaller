@@ -11,6 +11,8 @@ This tool written in Go allows to create app shrotcuts on the linux desktop envi
 ```sh
 > sudo appinstall AppImageFilePath
 ```
+After the installation, the Appimage is no longer needed and can be deleted.
+
 ## Demo
 ![](https://github.com/Drosaca/appImageInstaller/blob/main/assets/demo.gif)
 
