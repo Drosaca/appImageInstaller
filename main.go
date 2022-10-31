@@ -28,6 +28,10 @@ func createDirectories(config structs.Config) error {
 	if err != nil {
 		return err
 	}
+	err = os.Chmod(config.ExecDir, 0777)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
