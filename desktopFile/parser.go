@@ -7,9 +7,9 @@ import (
 )
 
 func (d DesktopFile) parseCategory(line string) (bool, string) {
-	rCategory, _ := regexp.Compile(`\[(.+)\]`)
+	rCategory, _ := regexp.Compile(`^( )*\[(.+)\]$`)
 	if rCategory.MatchString(line) {
-		category := rCategory.FindStringSubmatch(line)[1]
+		category := rCategory.FindStringSubmatch(line)[2]
 		d.data[category] = map[string]string{}
 		return true, category
 	}

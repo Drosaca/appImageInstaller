@@ -95,7 +95,8 @@ func install(config structs.Config) {
 func main() {
 
 	if len(os.Args) != 2 || os.Args[1] == "-h" {
-		fmt.Println("usage :appinstall path")
+		fmt.Println("usage: sudo appinstall path/to/app.appimage")
+		os.Exit(0)
 	}
 	path, _ := filepath.Abs(os.Args[1])
 	config := setConfig(path)
