@@ -8,8 +8,8 @@ This tool written in Go allows to create app shrotcuts on the linux desktop envi
 
 ## Usage
 
-```sh
-> sudo appinstall AppImageFilePath
+```shell
+sudo appinstall AppImageFilePath
 ```
 After the installation, the Appimage is no longer needed and can be deleted.
 
@@ -21,7 +21,9 @@ After the installation, the Appimage is no longer needed and can be deleted.
 Just download the binary file and copy it to your binaries path
 
 ```shell
-> sudo cp appinstall /usr/bin
+sudo cp appinstall /usr/bin
 ```
 
 That's it
+
+_note: if you faced a bug feel free to open an issue_
