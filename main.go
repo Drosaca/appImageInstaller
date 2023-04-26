@@ -28,6 +28,10 @@ func createDirectories(config structs.Config) error {
 	if err != nil {
 		return err
 	}
+	err = os.MkdirAll(config.ImgPath, os.ModePerm)
+	if err != nil {
+		return err
+	}
 	err = os.Chmod(config.ExecDir, 0777)
 	if err != nil {
 		return err
@@ -96,11 +100,20 @@ func main() {
 
 	if len(os.Args) != 2 || os.Args[1] == "-h" {
 		fmt.Println("usage: sudo appinstall path/to/app.AppImage")
+		fmt.Println("after install use sudo update-desktop-database to reload gnome icons")
+		os.Exit(0)
+	}
+	if os.Args[1] == "-v" {
+		fmt.Println("0.5")
 		os.Exit(0)
 	}
 	path, _ := filepath.Abs(os.Args[1])
+	_, err := os.Stat(path)
+	if err != nil {
+		log.Fatal(err)
+	}
 	config := setConfig(path)
-	err := os.RemoveAll(config.ExtractDir)
+	err = os.RemoveAll(config.ExtractDir)
 	if err != nil {
 		log.Fatal("removing", err)
 	}

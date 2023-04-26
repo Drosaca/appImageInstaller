@@ -1,0 +1,5 @@
+debug commands
+gtk-launch *.desktop
+gio launch *.desktop
+desktop-file-validate
+
