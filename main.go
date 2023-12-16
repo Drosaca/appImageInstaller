@@ -119,7 +119,7 @@ func runInstallScript(appPath string) error {
 func help() {
 	fmt.Println("usage: sudo appinstall path/to/app.AppImage")
 	fmt.Println("(after install use sudo update-desktop-database to reload gnome icons)")
-	fmt.Println("other options [BETA]: ")
+	fmt.Println("other options: ")
 	fmt.Println("-l          #to list installed apps (from this tool only)")
 	fmt.Println(" ")
 	fmt.Println("-d appName  #to delete the app (installed by this tool)")
@@ -165,7 +165,7 @@ func main() {
 		os.Exit(0)
 	}
 	if os.Args[1] == "-v" {
-		fmt.Println("0.6")
+		fmt.Println("1.0")
 		os.Exit(0)
 	}
 	err := chooseScript()
