@@ -1,6 +1,18 @@
-## App Installer
+## App Installer 
 
 ![CI](https://github.com/Drosaca/appImageInstaller/actions/workflows/go.yml/badge.svg)
+
+<p >
+  <a href="#">
+    <img src="https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white" alt="build"/>
+  </a>
+  <a href="https://github.com/Drosaca/appImageInstaller/releases">
+    <img src="https://img.shields.io/github/v/release/Drosaca/appImageInstaller?style=for-the-badge&sort=semver" alt="tag"/>
+  </a>
+  <a href="https://github.com/d4data-official/d4data-app/issues">
+    <img src="https://img.shields.io/github/issues-raw/Drosaca/appImageInstaller?style=for-the-badge" alt="issues"/>
+  </a>
+</p>
 
 
 ### Have you ever download an **AppImage** file ?
