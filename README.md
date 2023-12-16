@@ -9,7 +9,7 @@
   <a href="https://github.com/Drosaca/appImageInstaller/releases">
     <img src="https://img.shields.io/github/v/release/Drosaca/appImageInstaller?style=for-the-badge&sort=semver" alt="tag"/>
   </a>
-  <a href="https://github.com/d4data-official/d4data-app/issues">
+  <a href="https://github.com/Drosaca/appImageInstaller/issues">
     <img src="https://img.shields.io/github/issues-raw/Drosaca/appImageInstaller?style=for-the-badge" alt="issues"/>
   </a>
 </p>
