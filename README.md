@@ -1,5 +1,8 @@
 ## App Installer
 
+![CI](https://github.com/Drosaca/appImageInstaller/actions/workflows/go.yml/badge.svg)
+
+
 ### Have you ever download an **AppImage** file ?
 
 This type of binary has the advantage of being portable but it will not be present on your Desktop manager's applications list .
