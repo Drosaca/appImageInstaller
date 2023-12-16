@@ -9,6 +9,7 @@ import (
 type DesktopFile struct {
 	data             map[string]map[string]string
 	selectedCategory string
+	source           string
 }
 
 func (d DesktopFile) Category(name string) DesktopFile {
@@ -39,10 +40,12 @@ func New() *DesktopFile {
 	desktop := new(DesktopFile)
 	desktop.data = make(map[string]map[string]string)
 	desktop.selectedCategory = "root"
+	desktop.source = "self generated"
 	return desktop
 }
 func (d DesktopFile) FromMap(desktopMap map[string]map[string]string) {
 	d.data = desktopMap
+	d.source = "self-generated"
 }
 
 func (d DesktopFile) FromFile(path string) error {
@@ -52,6 +55,7 @@ func (d DesktopFile) FromFile(path string) error {
 	}
 	scanner := bufio.NewScanner(file)
 	d.parseFile(scanner)
+	d.source = path
 	return nil
 }
 
@@ -74,4 +78,18 @@ func (d DesktopFile) ToFile(path string) error {
 		}
 	}
 	return nil
+}
+
+func (d DesktopFile) HasValues(category string, values []string) bool {
+	for _, value := range values {
+		_, err := d.Category(category).Get(value)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}
+
+func (d DesktopFile) GetSource() string {
+	return d.source
 }
