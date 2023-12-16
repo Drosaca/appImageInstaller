@@ -1,1 +1,1 @@
-module appImageInstaller
+module appinstall

@@ -1,10 +1,10 @@
 package main
 
 import (
-	f "appImageInstaller/functions"
-	"appImageInstaller/manager"
-	"appImageInstaller/structs"
-	"appImageInstaller/utils"
+	f "appinstall/functions"
+	"appinstall/manager"
+	"appinstall/structs"
+	"appinstall/utils"
 	"fmt"
 	"log"
 	"os"
@@ -121,7 +121,6 @@ func help() {
 	fmt.Println("(after install use sudo update-desktop-database to reload gnome icons)")
 	fmt.Println("other options [BETA]: ")
 	fmt.Println("-l          #to list installed apps (from this tool only)")
-	fmt.Println("            #can also raise some errors about other desktop files")
 	fmt.Println(" ")
 	fmt.Println("-d appName  #to delete the app (installed by this tool)")
 
@@ -133,7 +132,8 @@ func listing() error {
 	entries := m.List()
 	fmt.Println("Apps:")
 	for _, entry := range entries {
-		fmt.Println(entry.Category("Desktop Entry").Get("Name"))
+		name, _ := entry.Category("Desktop Entry").Get("Name")
+		fmt.Println(name)
 	}
 	return nil
 }
@@ -160,7 +160,7 @@ func chooseScript() error {
 
 func main() {
 
-	if len(os.Args) != 2 || os.Args[1] == "-h" {
+	if os.Args[1] == "-h" {
 		help()
 		os.Exit(0)
 	}

@@ -1,11 +1,12 @@
 package manager
 
 import (
-	"appImageInstaller/desktopFile"
-	"appImageInstaller/structs"
+	"appinstall/desktopFile"
+	"appinstall/structs"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -33,13 +34,21 @@ func (m *Manager) IsGeneratedDesktop(deskFile *desktopFile.DesktopFile) (bool, e
 }
 
 func (m *Manager) IsValidDesktop(deskFile *desktopFile.DesktopFile) (bool, error) {
-	if !deskFile.HasValues("Desktop Entry", []string{"Get", "Name", "Exec"}) {
+	if !deskFile.HasValues("Desktop Entry", []string{"Name", "Exec"}) {
 		return false, fmt.Errorf("missing basic values")
 	}
-	path, _ := deskFile.Category("Desktop Entry").Get("Exec")
+	cmd, _ := deskFile.Category("Desktop Entry").Get("Exec")
+	words := strings.Split(cmd, " ")
+	if len(words) == 0 {
+		return false, fmt.Errorf("no exec path")
+	}
+	path := words[0]
 	_, err := os.Stat(path)
 	if err != nil {
-		return false, fmt.Errorf("fail to find binary")
+		_, err = exec.LookPath(path)
+		if err != nil {
+			return false, fmt.Errorf("fail to find binary: ", path)
+		}
 	}
 	return true, nil
 }
@@ -60,7 +69,7 @@ func (m *Manager) List() []*desktopFile.DesktopFile {
 		}
 		_, err = m.IsValidDesktop(deskFile)
 		if err != nil {
-			fmt.Println("Listing Error for file:", deskFilePath, " ", err)
+			//fmt.Println("Listing Error for file:", deskFilePath, " ", err)
 			continue
 		}
 		isGenerated, err := m.IsGeneratedDesktop(deskFile)
