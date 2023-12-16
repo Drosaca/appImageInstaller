@@ -1,9 +1,10 @@
 package main
 
 import (
-	f "appImageInstaller/functions"
-	"appImageInstaller/structs"
-	"appImageInstaller/utils"
+	f "appinstall/functions"
+	"appinstall/manager"
+	"appinstall/structs"
+	"appinstall/utils"
 	"fmt"
 	"log"
 	"os"
@@ -96,30 +97,79 @@ func install(config structs.Config) {
 
 }
 
-func main() {
-
-	if len(os.Args) != 2 || os.Args[1] == "-h" {
-		fmt.Println("usage: sudo appinstall path/to/app.AppImage")
-		fmt.Println("after install use sudo update-desktop-database to reload gnome icons")
-		os.Exit(0)
-	}
-	if os.Args[1] == "-v" {
-		fmt.Println("0.5")
-		os.Exit(0)
-	}
-	path, _ := filepath.Abs(os.Args[1])
+func runInstallScript(appPath string) error {
+	path, _ := filepath.Abs(appPath)
 	_, err := os.Stat(path)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("install", appPath, ":", err)
 	}
 	config := setConfig(path)
 	err = os.RemoveAll(config.ExtractDir)
 	if err != nil {
-		log.Fatal("removing", err)
+		return fmt.Errorf("removing extract directory :", err)
 	}
 	install(config)
 	err = os.RemoveAll(config.ExtractDir)
 	if err != nil {
-		log.Fatal("removing: ", err)
+		return fmt.Errorf("removing extract dir: ", err)
+	}
+	return nil
+}
+
+func help() {
+	fmt.Println("usage: sudo appinstall path/to/app.AppImage")
+	fmt.Println("(after install use sudo update-desktop-database to reload gnome icons)")
+	fmt.Println("other options: ")
+	fmt.Println("-l          #to list installed apps (from this tool only)")
+	fmt.Println(" ")
+	fmt.Println("-d appName  #to delete the app (installed by this tool)")
+
+}
+
+func listing() error {
+	config := setConfig("")
+	m := manager.New(config)
+	entries := m.List()
+	fmt.Println("Apps:")
+	for _, entry := range entries {
+		name, _ := entry.Category("Desktop Entry").Get("Name")
+		fmt.Println(name)
+	}
+	return nil
+}
+
+func deleteApp(appName string) error {
+	config := setConfig("")
+	m := manager.New(config)
+	return m.Delete(appName)
+}
+
+func chooseScript() error {
+	if os.Args[1] == "-l" {
+		return listing()
+	}
+	if os.Args[1] == "-d" && len(os.Args) >= 3 {
+		return deleteApp(os.Args[2])
+	}
+	if len(os.Args) == 2 {
+		return runInstallScript(os.Args[1])
+	}
+	help()
+	return nil
+}
+
+func main() {
+
+	if os.Args[1] == "-h" {
+		help()
+		os.Exit(0)
+	}
+	if os.Args[1] == "-v" {
+		fmt.Println("1.0")
+		os.Exit(0)
+	}
+	err := chooseScript()
+	if err != nil {
+		fmt.Println(err)
 	}
 }

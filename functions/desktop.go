@@ -1,9 +1,9 @@
 package functions
 
 import (
-	"appImageInstaller/desktopFile"
-	"appImageInstaller/structs"
-	"appImageInstaller/utils"
+	"appinstall/desktopFile"
+	"appinstall/structs"
+	"appinstall/utils"
 	"fmt"
 	"log"
 )
